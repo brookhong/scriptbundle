@@ -51,6 +51,87 @@ $CBS_SORT = 0x0100
 
 HotKeySet("#x","MM")
 
+
+; added by brook hong
+
+; 设置不会自动停止脚本
+Opt("TrayAutoPause",0)
+; 使自定义的Tray菜单点击时不会被check
+Opt("TrayMenuMode",2)
+
+$reload_tray = TrayCreateItem("Reload This")
+TrayItemSetOnEvent(-1,"_Reload")
+Func _Reload()
+    TraySetIcon("warning")
+    ShellExecute(@ScriptFullPath)
+    Exit
+EndFunc
+
+$help_tray = TrayCreateItem("Help")
+TrayItemSetOnEvent(-1,"_Usage")
+Func _Usage()
+    $file = FileOpen(@ScriptFullPath, 0)
+    If $file <> -1 Then
+        $cnt = FileRead($file)
+        FileClose($file)
+    endif
+    $array = StringRegExp($cnt, '\n;;(.*?)\n', 3)
+
+    $usage = ""
+    for $i = 0 to UBound($array) - 1
+        $usage = $usage & "* " &$array[$i]
+    Next
+    MsgBox(64, "帮助", $usage)
+EndFunc
+
+#include <Process.au3>
+;; f7, 如果当前窗口是资源管理器的话，就在当前目录启动cygwin
+$cygwinroot = "c:\cygwin\"
+HotKeySet("{f7}", "_CygwinHere")
+Func _CygwinHere()
+    $process = _ProcessGetName(WinGetProcess("[active]"))
+    if StringCompare($process, "Explorer.EXE") = 0 then
+        ControlClick("[active]", "", 1001, "left", 3, 3)
+        Sleep(300)
+        $pwd = ControlGetText("[active]", "", "[CLASS:Edit]")
+        $pwd = StringRegExpReplace($pwd, "\\","/")
+        Run($cygwinroot & 'bin\mintty.exe -e /bin/xhere /bin/bash "' & $pwd&'"')
+    else
+        HotKeySet("{f7}")
+        Send("{f7}")
+        HotKeySet("{f7}", "_CygwinHere")
+    endif
+EndFunc
+
+;; ctrl+g, 相当于以下操作：按ctrl+c，运行gvim，等待新启动的gvim窗口出现，按ctrl+v，按ESC，按gg
+$vimroot = "d:\tools"
+HotKeySet("^g", "_CopyToGvim")
+Func _CopyToGvim()
+    Send("^c")
+    Run($vimroot & "\Vim\vim73\gvim.exe")
+    ;WinWaitActive("[No Name] - GVIM")
+    WinWaitActive("[CLASS:Vim]")
+    Send("^v{Esc}gg")
+EndFunc
+
+;; f6, 如果当前窗口是资源管理器的话，就在当前目录启动cmd
+HotKeySet("{f6}", "_CmdHere")
+Func _CmdHere()
+    $process = _ProcessGetName(WinGetProcess("[active]"))
+    if StringCompare($process, "Explorer.EXE") = 0 then
+        ControlClick("[active]", "", 1001, "left", 3, 3)
+        Sleep(300)
+        $pwd = ControlGetText("[active]", "", "[CLASS:Edit]")
+        Run(@ComSpec & " /k pushd " & $pwd)
+    else
+        HotKeySet("{f6}")
+        Send("{f6}")
+        HotKeySet("{f6}", "_CmdHere")
+    endif
+EndFunc
+
+; end of added by brook hong
+
 If IniRead(@ScriptDir & "\config.ini","Options","FirstRun",0) = 1 Then
 	IniWrite(@ScriptDir & "\config.ini","Options","FirstRun",0)
 	Gui()
