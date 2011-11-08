@@ -1,0 +1,13 @@
+#winrun.au3
+========================================
+$oShell = ObjCreate("shell.application")
+$oShellWindows=$oShell.FileRun
+========================================
+
+#winrun.vbs
+========================================
+Dim oShellApp
+On Error Resume Next
+Set oShellApp = CreateObject("Shell.Application")
+oShellApp.FileRu
+========================================

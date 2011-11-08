@@ -34,8 +34,6 @@ TrayItemSetOnEvent(-1,"Move_Tray")
 $about_tray = TrayCreateItem("About")
 TrayItemSetOnEvent(-1,"About")
 TrayCreateItem("")
-$exit_tray = TrayCreateItem("Exit")
-TrayItemSetOnEvent(-1,"ExitApp")
 TraySetState()
 TraySetToolTip("Hot Corners 2")
 
@@ -58,6 +56,13 @@ HotKeySet("#x","MM")
 Opt("TrayAutoPause",0)
 ; 使自定义的Tray菜单点击时不会被check
 Opt("TrayMenuMode",2)
+
+$vimroot = "d:\tools"
+$edit_tray = TrayCreateItem("Edit This")
+TrayItemSetOnEvent(-1,"_Edit")
+Func _Edit()
+    Run($vimroot & "\Vim\vim73\gvim.exe """ & @ScriptFullPath & """")
+EndFunc
 
 $reload_tray = TrayCreateItem("Reload This")
 TrayItemSetOnEvent(-1,"_Reload")
@@ -104,7 +109,6 @@ Func _CygwinHere()
 EndFunc
 
 ;; ctrl+g, 相当于以下操作：按ctrl+c，运行gvim，等待新启动的gvim窗口出现，按ctrl+v，按ESC，按gg
-$vimroot = "d:\tools"
 HotKeySet("^g", "_CopyToGvim")
 Func _CopyToGvim()
     Send("^c")
@@ -181,17 +185,17 @@ Func Gui()
 		$tr_icon = GUICtrlCreateIcon(@ScriptDir & "\Resources\TR.ico", 0, 304, 72, 32, 32, BitOR($SS_NOTIFY,$WS_GROUP))
 		$tr_combo = GUICtrlCreateCombo("", 264, 120, 113, 25, BitOR($CBS_DROPDOWNLIST,$CBS_AUTOHSCROLL,$CBS_SORT))
 		GUICtrlSetOnEvent(-1,"GUI_Combo")
-		GUICtrlSetData(-1, "Control Panel|My Documents|Nothing|Run...|Screen Saver|Search Google|Show Desktop|Stand By|Lock",IniRead(@ScriptDir & "\config.ini","Corners","TR","Nothing"))
+		GUICtrlSetData(-1, "Control Panel|My Documents|Nothing|Run...|Screen Saver|Search Google|Win Run|Show Desktop|Stand By|Lock",IniRead(@ScriptDir & "\config.ini","Corners","TR","Nothing"))
 		$bl_group = GUICtrlCreateGroup("Bottom Left", 48, 176, 145, 105)
 		$bl_icon = GUICtrlCreateIcon(@ScriptDir & "\Resources\BL.ico", 0, 104, 200, 32, 32, BitOR($SS_NOTIFY,$WS_GROUP))
 		$bl_combo = GUICtrlCreateCombo("", 64, 248, 113, 25, BitOR($CBS_DROPDOWNLIST,$CBS_AUTOHSCROLL,$CBS_SORT))
 		GUICtrlSetOnEvent(-1,"GUI_Combo")
-		GUICtrlSetData(-1, "Control Panel|My Documents|Nothing|Run...|Screen Saver|Search Google|Show Desktop|Stand By|Lock",IniRead(@ScriptDir & "\config.ini","Corners","BL","Nothing"))
+		GUICtrlSetData(-1, "Control Panel|My Documents|Nothing|Run...|Screen Saver|Search Google|Win Run|Show Desktop|Stand By|Lock",IniRead(@ScriptDir & "\config.ini","Corners","BL","Nothing"))
 		$br_group = GUICtrlCreateGroup("Bottom Right", 248, 176, 145, 105)
 		$br_icon = GUICtrlCreateIcon(@ScriptDir & "\Resources\BR.ico", 0, 304, 200, 32, 32, BitOR($SS_NOTIFY,$WS_GROUP))
 		$br_combo = GUICtrlCreateCombo("", 264, 246, 113, 25, BitOR($CBS_DROPDOWNLIST,$CBS_AUTOHSCROLL,$CBS_SORT))
 		GUICtrlSetOnEvent(-1,"GUI_Combo")
-		GUICtrlSetData(-1, "Control Panel|My Documents|Nothing|Run...|Screen Saver|Search Google|Show Desktop|Stand By|Lock",IniRead(@ScriptDir & "\config.ini","Corners","BR","Nothing"))
+		GUICtrlSetData(-1, "Control Panel|My Documents|Nothing|Run...|Screen Saver|Search Google|Win Run|Show Desktop|Stand By|Lock",IniRead(@ScriptDir & "\config.ini","Corners","BR","Nothing"))
 		$move_tab = GUICtrlCreateTabItem("Mouse Move")
 		$up_group = GUICtrlCreateGroup("Up", 160, 40, 121, 105)
 		$up_icon = GUICtrlCreateIcon(@ScriptDir & "\Resources\UP.ico", 0, 200, 64, 32, 32, BitOR($SS_NOTIFY,$WS_GROUP))
@@ -332,6 +336,8 @@ EndFunc
 Func Event_HandlerH($action)
 	If $mic = False Then
 	Switch IniRead(@ScriptDir & "\config.ini","Corners",$action,"Nothing")
+		Case "Win Run"
+			Send("#r")
 		Case "Control Panel"
 			ShellExecute("control.exe")
 		Case "My Documents"
@@ -369,8 +375,6 @@ Func Event_HandlerM($action)
 			ShellExecute("http://www.google.com/search?q=" & InputBox("Search Google","Enter you search:"))
 		Case "Show Desktop"
 			ShellExecute(@TempDir & "\tmp.scf")
-		Case "Win Run"
-			Send("#r")
 		Case "Stand By"
 			Shutdown(32)
 		Case "Lock"
