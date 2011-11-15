@@ -18,6 +18,8 @@ Existing Git Repo?
   git remote add origin git@github.com:brookhong/scriptbundle.git
   git push -u origin master
 ===================================================
-git config --global alias.d difftool
 git config --global alias.s status
+git config --global alias.d difftool
+git config --global diff.external /d/works/scriptbundle/gitdiff.sh
+git config core.filemode false
 ===================================================

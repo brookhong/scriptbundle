@@ -37,7 +37,7 @@ TrayCreateItem("")
 TraySetState()
 TraySetToolTip("Hot Corners 2")
 
-Dim $gui,$run_gui,$ctrl,$run_path,$gui_active,$tl_combo,$tr_combo,$bl_combo,$br_combo,$up_combo,$lf_combo,$dn_combo,$rt_combo,$section,$mic,$hc_delay,$mm_delay,$settings_gui,$hc_slide,$mm_slide,$startup_settings
+Dim $gui,$run_gui,$ctrl,$run_path,$gui_active,$tl_combo,$tr_combo,$bl_combo,$br_combo,$up_combo,$lf_combo,$dn_combo,$rt_combo,$section,$mic,$hc_delay,$mm_delay,$settings_gui,$hc_slide,$mm_slide,$startup_settings,$win_run_state
 $move_state = 2
 $hot_state = 2
 $both_state = 2
@@ -333,17 +333,61 @@ Func MM()
 	EndIf
 EndFunc
 
+$win_run_state = False
+Func toggleWinRun()
+	Send("#r")
+	If $win_run_state = True Then
+		Send("{Esc}")
+	EndIf
+	$win_run_state = NOT $win_run_state
+EndFunc
+
+Func getWinTitleByPid($pid)
+	$title = ""
+	$wins = WinList()
+
+	For $i = 1 to $wins[0][0]
+		; Only display visble windows that have a title
+		If $wins[$i][0] <> "" AND BitAnd( WinGetState($wins[$i][1]), 2 ) AND $pid = WinGetProcess($wins[$i][0]) Then
+			$title = $wins[$i][0]
+			ExitLoop
+		EndIf
+	Next
+	Return $title
+EndFunc
+
+Func activateWinByProcName($procName)
+	$procs = ProcessList($procName)
+	$ret = False
+	for $i = 1 to $procs[0][0]
+		$title = getWinTitleByPid($procs[$i][1])
+		if($title <> "") then
+			WinActivate($title)
+			$ret = True
+			ExitLoop
+		endif
+	next
+	return $ret
+EndFunc
+
+Func toggleRun($path)
+	$array = StringRegExp($path, '.*\\([^\\]*?)$', 3)
+	If Not activateWinByProcName($array[0]) Then
+		ShellExecute($path)
+	EndIf
+EndFunc
+
 Func Event_HandlerH($action)
 	If $mic = False Then
 	Switch IniRead(@ScriptDir & "\config.ini","Corners",$action,"Nothing")
 		Case "Win Run"
-			Send("#r")
+			toggleWinRun();
 		Case "Control Panel"
 			ShellExecute("control.exe")
 		Case "My Documents"
 			ShellExecute(@MyDocumentsDir)
 		Case "Run..."
-			ShellExecute(IniRead(@ScriptDir & "\config.ini","Paths",$action,""))
+			toggleRun(IniRead(@ScriptDir & "\config.ini","Paths",$action,""))
 		Case "Screen Saver"
 			ShellExecute(RegRead("HKEY_USERS\.DEFAULT\Control Panel\Desktop","SCRNSAVE.EXE"))
 		Case "Search Google"
