@@ -22,4 +22,6 @@ git config --global alias.s status
 git config --global alias.d difftool
 git config --global diff.external /d/works/scriptbundle/gitdiff.sh
 git config core.filemode false
+git show --pretty="format:" --name-only bd61ad98
+git config --global alias.sc "show --pretty=\"format:\" --name-only"
 ===================================================

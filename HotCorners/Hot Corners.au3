@@ -134,6 +134,25 @@ Func _CmdHere()
     endif
 EndFunc
 
+;; f4, 把当前活动窗口的标题保存到桌面上_SaveTitle.txt文件中
+HotKeySet("{f4}", "_SaveTitle")
+Func _SaveTitle()
+    $title = WinGetTitle("[active]")
+    $file = FileOpen(@DesktopDir & "\_SaveTitle.txt", 1)
+    If $file = -1 Then
+        MsgBox(64, "错误", "无法打开文件！")
+    else
+        FileWrite($file, $title & @CRLF)
+        FileClose($file)
+    EndIf
+EndFunc
+
+;; ctlr+alt+t, 测试入口
+HotKeySet("^!t", "_Test")
+Func _Test()
+    MsgBox(64, "_Test", "I'm testing.")
+EndFunc
+
 ; end of added by brook hong
 
 If IniRead(@ScriptDir & "\config.ini","Options","FirstRun",0) = 1 Then

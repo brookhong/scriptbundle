@@ -1,0 +1,95 @@
+alias ls='ls --color --show-control-chars'
+alias ll='ls -l'
+alias vim='vim -o'
+alias dir='dir -N --color'
+# export LANG="zh_CN.GBK"
+# export http_proxy=http://proxy.b.com:8080
+exp() {
+    if [ $# -lt 1 ]; then
+        echo "Please follow a path to explore."
+    else
+        cmd /c start `cygpath -w $1`
+    fi
+}
+range() {
+    if [ $# -lt 2 ]; then
+        echo "Please follow an low limit and an up limit."
+    else
+        i=$1;while [ $i -le $2 ];do  echo $i && i=$((i+1)); done
+    fi
+}
+p4opened() {
+    for i in `p4 clients -u $1|sed "s/^Client \([^ ]*\) .*/\1/"`; do p4 opened -C $i; done
+}
+cal() {
+    # perl -le "print 42.5/1.7"
+    if [ $# -lt 1 ]; then
+        echo "Please follow an expression, such as (42.5/1.7)*6."
+    else
+        perl -le "use Math::Calculus::Expression;my \$exp = Math::Calculus::Expression->new;\$exp->setExpression('$1');print \$exp->evaluate();"
+
+    fi
+}
+words() {
+    if [ $# -lt 1 ]; then
+        echo "Please follow the name of an text file."
+    else
+        for i in `grep -o "\b[A-z][A-z][A-z]\+\b" "$1" |sed 's/.*/\L&/g'|sort|awk '{if ($0!=line) print;line=$0}'`;do n=`grep -io "\b$i\b" "$1" |wc -l` && echo "$n,$i"; done|sort
+    fi
+}
+h2d () {
+    echo "obase=10;ibase=16;$@"|sed 's/=16;.*/\U&/g'|bc
+}
+
+d2h () {
+    echo "obase=16;ibase=10;$@"|bc
+}
+
+d2b () {
+    echo "obase=2;ibase=10;$@"|bc
+}
+
+b2h () {
+    echo "obase=16;ibase=2;$@"|bc
+} 
+
+b2d () {
+    echo "obase=10;ibase=2;$@"|bc
+} 
+
+h2c() {
+    echo "0: $@ 0a"|xxd.exe -r 
+}
+gdiff() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: gdiff <FILE1> <FILE2>."
+    else
+        /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
+    fi
+}
+
+cr() {
+    cmd /c start $@
+}
+
+vin() {
+    if [ $# -ne 1 ]; then
+        vim $@
+    else
+        if [ ${1#*:} != ${1%:*} ]; then
+            vim +${1#*:} ${1%:*}
+        else
+            vim $1
+        fi
+    fi
+}
+qt() {
+    amake=`alias make 2>/dev/nul`;
+    if [ -z "$amake" ]; then
+        export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
+        alias make='mingw32-make.exe'
+    else
+        export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
+        unalias make
+    fi
+}
