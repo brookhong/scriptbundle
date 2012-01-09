@@ -8,15 +8,6 @@ Opt("TrayMenuMode",1)
 Opt("TrayOnEventMode",1)
 Opt("GUIOnEventMode",1)
 
-If FileExists(@TempDir & "\tmp.scf") Then
-Else
-	FileWriteLine(@TempDir & "\tmp.scf","[Shell]")
-	FileWriteLine(@TempDir & "\tmp.scf","Command=2")
-	FileWriteLine(@TempDir & "\tmp.scf","IconFile=explorer.exe,3")
-	FileWriteLine(@TempDir & "\tmp.scf","[Taskbar]")
-	FileWriteLine(@TempDir & "\tmp.scf","Command=ToggleDesktop")
-EndIf
-
 TraySetIcon(@ScriptDir & "\Resources\Cursor.ico")
 TraySetClick(8)
 $conf_tray = TrayCreateItem("Configure")
@@ -61,7 +52,7 @@ $vimroot = "d:\tools"
 $edit_tray = TrayCreateItem("Edit This")
 TrayItemSetOnEvent(-1,"_Edit")
 Func _Edit()
-    Run($vimroot & "\Vim\vim73\gvim.exe """ & @ScriptFullPath & """")
+    Run($vimroot & "\Vim\gvim.exe """ & @ScriptFullPath & """")
 EndFunc
 
 $reload_tray = TrayCreateItem("Reload This")
@@ -150,7 +141,7 @@ EndFunc
 ;; ctlr+alt+t, ≤‚ ‘»Îø⁄
 HotKeySet("^!t", "_Test")
 Func _Test()
-    MsgBox(64, "_Test", "I'm testing.")
+    MsgBox(64, "_Test", "I'm testing." & @TempDir)
 EndFunc
 
 ; end of added by brook hong
@@ -413,7 +404,7 @@ Func Event_HandlerH($action)
 			$search = InputBox("Search Google","Enter you search:")
 			If @error = 0 Then ShellExecute("http://www.google.com/search?q=" & $search)
 		Case "Show Desktop"
-			ShellExecute(@TempDir & "\tmp.scf")
+			Send("#d")
 		Case "Stand By"
 			Shutdown(32)
 		Case "Lock"
@@ -437,7 +428,7 @@ Func Event_HandlerM($action)
 		Case "Search Google"
 			ShellExecute("http://www.google.com/search?q=" & InputBox("Search Google","Enter you search:"))
 		Case "Show Desktop"
-			ShellExecute(@TempDir & "\tmp.scf")
+			Send("#d")
 		Case "Stand By"
 			Shutdown(32)
 		Case "Lock"

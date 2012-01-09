@@ -1,16 +1,47 @@
 alias ls='ls --color --show-control-chars'
 alias ll='ls -l'
-alias vim='vim -o'
+# alias vim='vim -o'
 alias dir='dir -N --color'
 # export LANG="zh_CN.GBK"
 # export http_proxy=http://proxy.b.com:8080
-exp() {
-    if [ $# -lt 1 ]; then
-        echo "Please follow a path to explore."
-    else
-        cmd /c start `cygpath -w $1`
-    fi
-}
+# cygwin only
+if [ $OSTYPE == 'cygwin' ]; then
+    cr() {
+        cmd /c start $@
+    }
+    exp() {
+        if [ $# -lt 1 ]; then
+            echo "Please follow a path to explore."
+        else
+            cr `cygpath -w $1`
+        fi
+    }
+    vim() {
+        if [ $# -lt 1 ]; then
+            echo "Please follow a file name."
+        else
+            cr gvim -p --remote-tab-silent `cygpath -w $1`
+        fi
+    }
+    gdiff() {
+        if [ $# -lt 2 ]; then
+            echo "Usage: gdiff <FILE1> <FILE2>."
+        else
+            /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
+        fi
+    }
+    qt() {
+        amake=`alias make 2>/dev/nul`;
+        if [ -z "$amake" ]; then
+            export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
+            alias make='mingw32-make.exe'
+        else
+            export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
+            unalias make
+        fi
+    }
+fi
+
 range() {
     if [ $# -lt 2 ]; then
         echo "Please follow an low limit and an up limit."
@@ -60,18 +91,6 @@ b2d () {
 h2c() {
     echo "0: $@ 0a"|xxd.exe -r 
 }
-gdiff() {
-    if [ $# -lt 2 ]; then
-        echo "Usage: gdiff <FILE1> <FILE2>."
-    else
-        /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
-    fi
-}
-
-cr() {
-    cmd /c start $@
-}
-
 vin() {
     if [ $# -ne 1 ]; then
         vim $@
@@ -81,15 +100,5 @@ vin() {
         else
             vim $1
         fi
-    fi
-}
-qt() {
-    amake=`alias make 2>/dev/nul`;
-    if [ -z "$amake" ]; then
-        export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
-        alias make='mingw32-make.exe'
-    else
-        export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
-        unalias make
     fi
 }
