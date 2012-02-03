@@ -1,47 +1,63 @@
-alias ls='ls --color --show-control-chars'
-alias ll='ls -l'
-# alias vim='vim -o'
-alias dir='dir -N --color'
-# export LANG="zh_CN.GBK"
-# export http_proxy=http://proxy.b.com:8080
 # cygwin only
 if [ $OSTYPE == 'cygwin' ]; then
-    cr() {
-        cmd /c start $@
-    }
-    exp() {
-        if [ $# -lt 1 ]; then
-            echo "Please follow a path to explore."
-        else
-            cr `cygpath -w $1`
-        fi
-    }
-    vim() {
-        if [ $# -lt 1 ]; then
-            echo "Please follow a file name."
-        else
-            cr gvim -p --remote-tab-silent `cygpath -w $1`
-        fi
-    }
-    gdiff() {
-        if [ $# -lt 2 ]; then
-            echo "Usage: gdiff <FILE1> <FILE2>."
-        else
-            /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
-        fi
-    }
-    qt() {
-        amake=`alias make 2>/dev/nul`;
-        if [ -z "$amake" ]; then
-            export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
-            alias make='mingw32-make.exe'
-        else
-            export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
+    alias ls='ls --color --show-control-chars'
+        alias dir='dir -N --color'
+        cr() {
+            cmd /c start $@
+        }
+        exp() {
+            if [ $# -lt 1 ]; then
+                echo "Please follow a path to explore."
+            else
+                cr `cygpath -w $1`
+            fi
+        }
+        vim() {
+            if [ $# -lt 1 ]; then
+                echo "Please follow a file name."
+            else
+                cr gvim -p --remote-tab-silent `cygpath -w $1`
+            fi
+        }
+        gdiff() {
+            if [ $# -lt 2 ]; then
+                echo "Usage: gdiff <FILE1> <FILE2>."
+            else
+                /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
+            fi
+        }
+        qt() {
+            amake=`alias make 2>/dev/nul`;
+            if [ -z "$amake" ]; then
+                export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
+                alias make='mingw32-make.exe'
+            else
+                export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
             unalias make
-        fi
-    }
+            fi
+        }
+    # Mac OS only
+elif [ $OSTYPE == 'darwin10.0' ]; then
+    alias ls='ls -G'
+    export PATH=/usr/local/git/bin/:/Applications/MacVim-7_3-53/:$PATH
+    alias vim='mvim -o'
+    alias mysql='/usr/local/mysql-5.5.19-osx10.6-x86/bin/mysql'
+    export PS1="\[\033]0;\u@\h: \w\007\][\u@\h \W]\$ "
 fi
 
+alias ll='ls -l'
+# alias vim='vim -o'
+# export LANG="zh_CN.GBK"
+# export http_proxy=http://proxy.b.com:8080
+
+calc() {
+# perl -le "print 42.5/1.7"
+    if [ $# -lt 1 ]; then
+        echo "Please follow an expression, such as (42.5/1.7)*6."
+    else
+        perl -le "use Math::Calculus::Expression;my \$exp = Math::Calculus::Expression->new;\$exp->setExpression('$1');print \$exp->evaluate();"
+    fi
+}
 range() {
     if [ $# -lt 2 ]; then
         echo "Please follow an low limit and an up limit."
@@ -52,15 +68,6 @@ range() {
 p4opened() {
     for i in `p4 clients -u $1|sed "s/^Client \([^ ]*\) .*/\1/"`; do p4 opened -C $i; done
 }
-cal() {
-    # perl -le "print 42.5/1.7"
-    if [ $# -lt 1 ]; then
-        echo "Please follow an expression, such as (42.5/1.7)*6."
-    else
-        perl -le "use Math::Calculus::Expression;my \$exp = Math::Calculus::Expression->new;\$exp->setExpression('$1');print \$exp->evaluate();"
-
-    fi
-}
 words() {
     if [ $# -lt 1 ]; then
         echo "Please follow the name of an text file."
@@ -69,7 +76,7 @@ words() {
     fi
 }
 h2d () {
-    echo "obase=10;ibase=16;$@"|sed 's/=16;.*/\U&/g'|bc
+    echo "obase=10;ibase=16;$@"|perl -pe 's/=16;(\w+)/=16;\U$1/g'|bc
 }
 
 d2h () {

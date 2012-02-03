@@ -20,9 +20,20 @@ Existing Git Repo?
 ===================================================
 git config --global alias.s status
 git config --global alias.d difftool
+git config --global alias.co checkout
 git config --global diff.external /d/works/scriptbundle/gitdiff.sh
 git config core.filemode false
 git show --pretty="format:" --name-only bd61ad98
 git config --global alias.sc "show --pretty=\"format:\" --name-only"
 git config --global alias.sma "submodule add"
+
+git config --global core.gitproxy /usr/local/bin/gitproxy
+#!/bin/bash
+corkscrew <proxy_host> <proxy_port> $1 $2
+
+~/.ssh/config
+Host github.com
+     Hostname github.com
+     #ProxyCommand corkscrew <proxy_host> <proxy_port> %h %p
+     IdentityFile ~/.ssh/id_rsa.github
 ===================================================
