@@ -17,6 +17,9 @@ function traceFunction($a,$i,$show_args) {
 	print "{$a['function']}() called at [{$a['file']}:{$a['line']}]\n";
 
 	if(in_array($i,$show_args)) {
+		if(isset($a['object'])) {
+			var_dump($a['object']);
+		}
 		var_dump($a['args']);
 	}
 	$i++;
