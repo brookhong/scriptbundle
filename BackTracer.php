@@ -1,18 +1,15 @@
 <?php
 /**
- * 
+ * require_once "/works/scriptbundle/BackTracer.php";
+ * function php_trace($logFile, $showArgs);
+ * $logFile  -- log file path
+ * $showArgs -- array to specify whose args are dumped in backtrace
+ * For example here the backtrace will be print out on stdout,
+ * and the args of call #0 will be dumped.
+ * php_trace("php://stdout",array(0));
+ *
  */
-define('PHP_TRACE_INI',"/home/httpd/zhong/php_trace.ini");
-//define('PHP_TRACE_LOG',"/home/httpd/zhong/php_trace.log");
-define('PHP_TRACE_LOG',"php://stdout");
-$show_args = array();
-if(file_exists(PHP_TRACE_INI)) {
-	$ini_array = parse_ini_file(PHP_TRACE_INI);
-	$GLOBALS['show_args'] = explode(",",$ini_array['show_args']);
-}
-function traceFunction($a,$flag) {
-	static $i=0;
-	global $show_args;
+function traceFunction($a,$i,$show_args) {
 	print "#{$i} ";
 	if(isset($a['class'])) {
 		print "{$a['class']}->";
@@ -24,33 +21,17 @@ function traceFunction($a,$flag) {
 	}
 	$i++;
 }
-function php_trace() {
+function php_trace($logFile, $showArgs) {
 	ob_start();
-	array_walk(debug_backtrace(),'traceFunction');
+	global $argv;
+	print "\n================traced at ".strftime('%Y-%m-%d %H:%M:%S')."================\n";
+	print "php_sapi_name: $argv[0] ".php_sapi_name()."\n\n";
+	array_walk(debug_backtrace(),'traceFunction', $showArgs);
+	print "\n==================end of php_trace outputs:==================\n";
 	$trace = ob_get_contents();
 	ob_end_clean();
-	file_put_contents(PHP_TRACE_LOG,$trace); 
+	file_put_contents($logFile,$trace,FILE_APPEND); 
 }
-
-
-// test section
-class A 
-{
-	function c($p){
-		echo $p."\n";
-		php_trace();
-	}
-}
-
-function a($p) {
-	b($p);
-}
-
-function b($p) {
-	$a = new A();
-	$a->c($p);
-}
-
-a("abc");
-
+if($argv[0] == "BackTracer.php")
+	php_trace("php://stdout",array(0));
 ?>
