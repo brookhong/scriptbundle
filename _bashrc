@@ -1,6 +1,7 @@
 # cygwin only
 if [ $OSTYPE == 'cygwin' ]; then
-    alias ls='ls --color --show-control-chars'
+        export PATH=/d/tools/vim:$PATH
+        alias ls='ls --color --show-control-chars'
         alias dir='dir -N --color'
         cr() {
             cmd /c start $@
