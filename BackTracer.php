@@ -24,17 +24,23 @@ function traceFunction($a,$i,$show_args) {
 	}
 	$i++;
 }
-function php_trace($logFile, $showArgs) {
+function php_trace($logFile, $showArgs = array(), $varList = array()) {
 	ob_start();
-	global $argv;
 	print "\n================traced at ".strftime('%Y-%m-%d %H:%M:%S')."================\n";
-	print "php_sapi_name: $argv[0] ".php_sapi_name()."\n\n";
-	array_walk(debug_backtrace(),'traceFunction', $showArgs);
+	if(count($varList)) {
+		print "---------------------------\$varList--------------------------\n";
+		foreach ($varList as $value) {
+			var_dump($value);
+		}
+		print "-------------------------end of \$varList---------------------\n";
+	}
+	$tmp = debug_backtrace();
+	array_walk($tmp,'traceFunction', $showArgs);
 	print "\n==================end of php_trace outputs:==================\n";
 	$trace = ob_get_contents();
 	ob_end_clean();
 	file_put_contents($logFile,$trace,FILE_APPEND); 
 }
-if($argv[0] == "BackTracer.php")
+if ('cli' === php_sapi_name() && basename(__FILE__) === $argv[0])
 	php_trace("php://stdout",array(0));
 ?>
