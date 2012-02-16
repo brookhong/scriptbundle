@@ -6,10 +6,11 @@ use Config::IniFiles;
 use File::Basename;
 use Cwd 'abs_path';
 
-@ARGV = ('.') unless @ARGV;
+# @ARGV = ('.') unless @ARGV;
 my $g_refresh_inifile = 0;
 my $g_purge = 0;
-my $g_iniFileName = abs_path(basename(__FILE__)).".ini";
+my $g_rename = 0;
+my $g_iniFileName = $ENV{"HOME"}."/".basename(__FILE__).".ini";
 my $log = Config::IniFiles->new() or die "Failure: @Config::IniFiles::errors\n";
 
 sub checkDeadFile {
@@ -42,26 +43,37 @@ sub digestFile {
 
 	$digestObj->addfile(*FILE);
 	my $digest = $digestObj->hexdigest;
+	close FILE;
 
 	my $section = substr($digest,0,1);
-	my $val = $log->val($section, $digest);
-	if (defined($val)) {
-		print $digest." <= ".$File::Find::name." same as $val\n";
-		if($g_purge) {
-			print "[info] delete $File::Find::name.\n";
-			unlink $File::Find::name;
+	if($g_rename) {
+		my $newName = $_;
+		$newName =~ s/.*\.(.*)$/$digest\.$1/;
+		if($_ ne $newName) {
+			print "rename $_, $newName\n";
+			rename $_, $newName;
 		}
 	}
 	else {
-		$log->newval($section, $digest, $File::Find::name);
-		$log->WriteConfig($g_iniFileName.".tmp");
+		my $val = $log->val($section, $digest);
+		if (defined($val)) {
+			print $digest." <= ".$File::Find::name." same as $val\n";
+			if($g_purge) {
+				print "[info] delete $File::Find::name.\n";
+				unlink $File::Find::name;
+			}
+		}
+		else {
+			$log->newval($section, $digest, $File::Find::name);
+			$log->WriteConfig($g_iniFileName);
+		}
 	}
-	close FILE;
 }
 sub usage() {
-	print "perl ".basename(__FILE__)." -u\n\t--Show usage.\n";
+	print "perl ".basename(__FILE__)." -h\n\t--Show usage.\n";
 	print "perl ".basename(__FILE__)." -f\n\t--Check and refresh ini files.\n";
 	print "perl ".basename(__FILE__)." [-p] <path_to_purge>\n\t--Unique it, remove duplicate files with -p.\n";
+	print "perl ".basename(__FILE__)." [-r] <path_to_purge>\n\t--Unique it, rename all the files with -r.\n";
 	exit 1;
 }
 
@@ -72,7 +84,9 @@ while ( my $arg = shift @ARGV ) {
 			exit 1;
 		} elsif ($1 eq 'p') {
 			$g_purge = 1;
-		} elsif ($1 eq 'u') {
+		} elsif ($1 eq 'r') {
+			$g_rename = 1;
+		} elsif ($1 eq 'h') {
 			usage();
 		} else {
 			usage();
@@ -83,5 +97,9 @@ while ( my $arg = shift @ARGV ) {
 		last;
 	}
 }
-find(\&digestFile, @ARGV) if @ARGV;
-rename "$g_iniFileName.tmp", $g_iniFileName;
+if (@ARGV){
+	find(\&digestFile, @ARGV);
+}
+else {
+	usage();
+}
