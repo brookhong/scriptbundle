@@ -24,19 +24,26 @@ function traceFunction($a,$i,$show_args) {
 	}
 	$i++;
 }
-function php_trace($logFile, $showArgs = array(), $varList = array()) {
+function php_trace($logFile, $showArgs = array()) {
 	ob_start();
 	print "\n================traced at ".strftime('%Y-%m-%d %H:%M:%S')."================\n";
-	if(count($varList)) {
-		print "---------------------------\$varList--------------------------\n";
-		foreach ($varList as $value) {
-			var_dump($value);
-		}
-		print "-------------------------end of \$varList---------------------\n";
-	}
 	$tmp = debug_backtrace();
 	array_walk($tmp,'traceFunction', $showArgs);
 	print "\n==================end of php_trace outputs:==================\n";
+	$trace = ob_get_contents();
+	ob_end_clean();
+	file_put_contents($logFile,$trace,FILE_APPEND); 
+}
+function php_log($logFile, $varList = array())
+{
+	ob_start();
+	if(count($varList)) {
+		print "===========================\$varList==========================\n";
+		foreach ($varList as $value) {
+			var_dump($value);
+		}
+		print "=========================end of \$varList=====================\n";
+	}
 	$trace = ob_get_contents();
 	ob_end_clean();
 	file_put_contents($logFile,$trace,FILE_APPEND); 

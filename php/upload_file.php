@@ -1,5 +1,5 @@
 <?php
-if ($_FILES["file"]["size"] < 20000)
+if ($_FILES["file"]["size"] < 90000)
 {
 	if ($_FILES["file"]["error"] > 0)
 	{
