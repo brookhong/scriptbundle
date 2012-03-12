@@ -58,17 +58,29 @@
     cpan[1]> install JONATHAN/Math-Calculus-Expression-0.2.2.tar.gz
 
 > ## apache
-> > ### httpd.conf
+> > ### httpd.conf@windows
 > > > ---
-    DocumentRoot "D:/works/scriptbundle/php/"
+    LoadModule php5_module "D:/tools/php-5.3.10-Win32-VC9-x86/php5apache2_2.dll"
+    AddType application/x-httpd-php .php
+    Alias /scriptbundle D:/works/scriptbundle/php/
     <Directory "D:/works/scriptbundle/php/">
         Options Indexes FollowSymLinks
         AllowOverride None
         Order allow,deny
         Allow from all
     </Directory>
-    LoadModule php5_module "D:/tools/php-5.3.10-Win32-VC9-x86/php5apache2_2.dll"
-    AddType application/x-httpd-php .php
+
+    Alias /phpmyadmin d:/install_pkgs/phpMyAdmin-3.4.10.1-english/
+    <Directory "d:/install_pkgs/phpMyAdmin-3.4.10.1-english/">
+        DirectoryIndex main.php
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+> > > ---
+    * Starting httpd: Warning: DocumentRoot [/home/mysite] does not exist.
+    Edit /etc/sysconfig/selinux and change it to disabled then reboot.
 
 > > ### php
 > > > ---
@@ -77,14 +89,36 @@
       find . -iname "*.php" -or -iname "*.tpl" -or -iname "*.html" -or -iname "*.inc" -or -iname "*.yml" -or -iname "*.tmpl" -or -iname "*.template" -or -iname "*.class" > cscope.files
       cscope -bq
 
+> > ### php.ini@windows
+> > > ---
+    extension_dir=d:/tools/php-5.3.10-Win32-VC9-x86/ext/
+    extension=php_mysql.dll
+    extension=php_mysqli.dll
 
-> ## gnu
+> ## linux
 > > > ---
     grep -o "^#[0-9]\+[^(]*\|called at .*$" debug_print_backtrace_of_gigya_settings.log
     find . -type f -newer ./sql/3.0/product_countries.sql -exec ls -l {} \;
     -T filename In x or t mode, tar will read the list of names to be extracted from filename.  In c mode, tar will read names to be archived from filename.
     tar czvf a.tgz -T a
-
+    iptables -L
+    iptables -D INPUT 6
+    iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+    iptables -I INPUT 1  -p tcp --dport 8080 -j ACCEPT
+    iptables -I RH-Firewall-1-INPUT -s 172.28.153.0/24  -p tcp -j ACCEPT
+    iptables -I RH-Firewall-1-INPUT -d 172.28.153.84  -p tcp -j ACCEPT
+    iptables -I RH-Firewall-1-INPUT -s 172.28.153.84  -p tcp --dport 37786 -j ACCEPT
+    ll /etc/sysconfig/iptables
+    /sbin/service iptables save
+    iptables -A Linox-INTRANET-INPUT-HOOK  -p tcp --dport 8080 -j ACCEPT
+  
+> > > ---
+    build openssl
+    ./config --prefix=/opt/openssl-0.9.8e/
+    make
+    make test
+    make install
+    sudo make install
 # windows
 > ## cmd
 > > > ---
