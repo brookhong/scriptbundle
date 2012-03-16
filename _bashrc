@@ -110,3 +110,17 @@ vin() {
         fi
     fi
 }
+listtextfiles() {
+    if [ $# -ne 1 ]; then
+        echo "Please follow a path to list."
+    else
+        find $1 -type f -exec file {} \;|grep ":.*text"|cut -d ":" -f1
+    fi
+}
+listbinaryfiles() {
+    if [ $# -ne 1 ]; then
+        echo "Please follow a path to list."
+    else
+        find $1 -type f -exec file {} \;|grep -v ":.*text"|cut -d ":" -f1
+    fi
+}

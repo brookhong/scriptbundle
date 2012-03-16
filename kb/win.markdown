@@ -97,8 +97,14 @@
 
 > ## linux
 > > > ---
+    export HISTCONTROL=ignoredups
+    export HISTFILE=~/.bash_history
+    history -cr $HISTFILE
+    rpm -q --info php-aws
     grep -o "^#[0-9]\+[^(]*\|called at .*$" debug_print_backtrace_of_gigya_settings.log
     find . -type f -newer ./sql/3.0/product_countries.sql -exec ls -l {} \;
+    find /home/ -maxdepth 2 -iname ".bashrc" -exec echo "###"{} \; -exec echo "=========" \; -exec cat {} \; -exec echo "==========" \;
+    find broken links: find / -type l ! -exec test -r {} \; -print
     -T filename In x or t mode, tar will read the list of names to be extracted from filename.  In c mode, tar will read names to be archived from filename.
     tar czvf a.tgz -T a
     iptables -L
@@ -111,6 +117,7 @@
     ll /etc/sysconfig/iptables
     /sbin/service iptables save
     iptables -A Linox-INTRANET-INPUT-HOOK  -p tcp --dport 8080 -j ACCEPT
+    extract rpm package: rpm2cpio php-5.1.4-1.esp1.x86_64.rpm | cpio -idmv
   
 > > > ---
     build openssl

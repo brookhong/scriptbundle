@@ -1,12 +1,12 @@
 <?php
 /**
  * require_once "/works/scriptbundle/BackTracer.php";
- * function php_trace($logFile, $showArgs);
- * $logFile  -- log file path
+ * function php_trace($showArgs, $logFile);
  * $showArgs -- array to specify whose args are dumped in backtrace
+ * $logFile  -- log file path
  * For example here the backtrace will be print out on stdout,
  * and the args of call #0 will be dumped.
- * php_trace("php://stdout",array(0));
+ * php_trace(array(0),"php://stdout");
  *
  */
 function traceFunction($a,$i,$show_args) {
@@ -24,7 +24,7 @@ function traceFunction($a,$i,$show_args) {
 	}
 	$i++;
 }
-function php_trace($logFile, $showArgs = array()) {
+function php_trace($showArgs = array(), $logFile = "") {
 	ob_start();
 	print "\n================traced at ".strftime('%Y-%m-%d %H:%M:%S')."================\n";
 	$tmp = debug_backtrace();
@@ -32,13 +32,17 @@ function php_trace($logFile, $showArgs = array()) {
 	print "\n==================end of php_trace outputs:==================\n";
 	$trace = ob_get_contents();
 	ob_end_clean();
+	if($logFile == "")
+		$logFile = dirname(__FILE__)."/php_trace.log";
 	file_put_contents($logFile,$trace,FILE_APPEND); 
 }
-function php_log($logFile, $varList = array())
+function php_log($varList = array(), $logFile = "")
 {
 	ob_start();
 	if(count($varList)) {
 		print "===========================\$varList==========================\n";
+		$tmp = debug_backtrace();
+		print "logged at {$tmp[0]['file']}:{$tmp[0]['line']}\n";
 		foreach ($varList as $value) {
 			var_dump($value);
 		}
@@ -46,8 +50,10 @@ function php_log($logFile, $varList = array())
 	}
 	$trace = ob_get_contents();
 	ob_end_clean();
+	if($logFile == "")
+		$logFile = dirname(__FILE__)."/php_trace.log";
 	file_put_contents($logFile,$trace,FILE_APPEND); 
 }
 if ('cli' === php_sapi_name() && basename(__FILE__) === $argv[0])
-	php_trace("php://stdout",array(0));
+	php_trace(array(0),"php://stdout");
 ?>
