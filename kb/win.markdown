@@ -32,11 +32,19 @@
     * /usr/local/bin/gitproxy
     #!/bin/bash
     corkscrew <proxy_host> <proxy_port> $1 $2
-    * ~/.ssh/config
+    * ~/.ssh/config on client
     Host github.com
         Hostname github.com
         #ProxyCommand corkscrew <proxy_host> <proxy_port> %h %p
         IdentityFile ~/.ssh/id_rsa.git
+    * ~/.ssh on server
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/authorized_keys
+    * /etc/ssh/sshd_config on server
+        RSAAuthentication yes
+        PubkeyAuthentication yes
+        AuthorizedKeysFile    .ssh/authorized_keys        
+    * sudo /usr/sbin/sshd -d
    
 > ## vim
 > > > ---
@@ -118,6 +126,7 @@
     /sbin/service iptables save
     iptables -A Linox-INTRANET-INPUT-HOOK  -p tcp --dport 8080 -j ACCEPT
     extract rpm package: rpm2cpio php-5.1.4-1.esp1.x86_64.rpm | cpio -idmv
+    jobeet: svn co http://svn.jobeet.org/doctrine/trunk/
   
 > > > ---
     build openssl

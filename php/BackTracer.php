@@ -36,13 +36,13 @@ function php_trace($showArgs = array(), $logFile = "") {
 		$logFile = dirname(__FILE__)."/php_trace.log";
 	file_put_contents($logFile,$trace,FILE_APPEND); 
 }
-function php_log($varList = array(), $logFile = "")
+function php_log($varList = array(), $logFile = "", $level = 0)
 {
 	ob_start();
 	if(count($varList)) {
 		print "===========================\$varList==========================\n";
 		$tmp = debug_backtrace();
-		print "logged at {$tmp[0]['file']}:{$tmp[0]['line']}\n";
+		print "logged at {$tmp[$level]['file']}:{$tmp[$level]['line']}\n";
 		foreach ($varList as $value) {
 			var_dump($value);
 		}
@@ -56,4 +56,46 @@ function php_log($varList = array(), $logFile = "")
 }
 if ('cli' === php_sapi_name() && basename(__FILE__) === $argv[0])
 	php_trace(array(0),"php://stdout");
+//else
+	//php_log(array($_SERVER['REQUEST_URI'], "BackTracer.php included"), "");
+function php_tick(){
+	$backtrace = debug_backtrace();
+	$line = $backtrace[0]['line'] - 1;
+	$file = $backtrace[0]['file'];
+
+	if ($file == __FILE__) return;
+
+	static $fp, $cur, $buf;
+	if (!isset($fp[$file])) {
+		$fp[$file] = fopen($file, 'r');
+		$cur[$file] = 0;
+	}
+
+	if (isset($buf[$file][$line])) {
+		$code = $buf[$file][$line];
+	} else {
+		do {
+			$code = fgets($fp[$file]);
+			$buf[$file][$cur[$file]] = $code;
+		} while (++$cur[$file] <= $line);
+	}
+
+	$line++;
+	$trace = "$file:$line\n$code";
+	$logFile = dirname(__FILE__)."/php_trace.log";
+	file_put_contents($logFile,$trace,FILE_APPEND); 
+}
+//declare(ticks=1);
+//register_tick_function("php_tick");
+function mock_mysql_query($q, $link = NULL) {
+	php_log(array($q),"", 2);
+	return mysql_query_original($q, $link);
+}
+if (!function_exists('mysql_query_original')) {
+	runkit_function_copy('mysql_query', 'mysql_query_original');
+	//runkit_function_redefine('mysql_query', '$q','php_log(array($q),"", 1);return mysql_query_original($q);');
+	//runkit_function_redefine('mysql_query', '$q, $link','php_log(array($q),"", 1);return mysql_query_original($q, $link);');
+	runkit_function_redefine('mysql_query', '$q','return mock_mysql_query($q);');
+	runkit_function_redefine('mysql_query', '$q, $link','return mock_mysql_query($q,$link);');
+}
 ?>

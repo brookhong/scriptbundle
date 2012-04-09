@@ -47,6 +47,7 @@ elif [ $OSTYPE == 'darwin10.0' ]; then
 fi
 
 alias ll='ls -l'
+export HISTCONTROL=ignoredups
 # alias vim='vim -o'
 # export LANG="zh_CN.GBK"
 # export http_proxy=http://proxy.b.com:8080
