@@ -96,6 +96,14 @@
     * allphpfiles.sh
       find . -iname "*.php" -or -iname "*.tpl" -or -iname "*.html" -or -iname "*.inc" -or -iname "*.yml" -or -iname "*.tmpl" -or -iname "*.template" -or -iname "*.class" > cscope.files
       cscope -bq
+    * in apache.conf --
+      PHPINIDir /home/brookhong/php
+
+> > ### php
+> > > ---
+    Get real height of a div --
+    jQuery(jQuery("div.failure.message")[1]).outerHeight()
+    jQuery("div.failure.message")[1].offsetHeight
 
 > > ### php.ini@windows
 > > > ---

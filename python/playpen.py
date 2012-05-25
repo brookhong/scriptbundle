@@ -1,6 +1,7 @@
 import re
 import httplib
 import urllib
+import base64
 
 #from urlparse import urlparse
 #o = urlparse('http://www.cwi.nl:80/%7Eguido/Python.html?a=d')
@@ -39,4 +40,12 @@ a.run()
 print urllib.quote_plus("https://localhost/test.php")
 print urllib.quote_plus("echo 'brook hong is here' > announcements.txt")
 print urllib.quote_plus("\\\"")
+import cgi
+print cgi.escape("<a href='test'>Test</a>", False)
 
+import HTMLParser
+htmlparser = HTMLParser.HTMLParser()
+print htmlparser.unescape("&gt;")
+
+print base64.encodestring("print 'yes'")
+print base64.decodestring("aWYgKCdjbGknID09PSBwaHBfc2FwaV9uYW1lKCkpIHsgcHJpbnQgJ3llcyc7IH0=")
