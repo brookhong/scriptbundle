@@ -27,7 +27,27 @@ if(property_exists($a, 'name'))
     print "name ".$a->name;
 
 $a = array();
+$b = array();
+$b[0] = 33;
+echo "a:".reset($a);
 $a['d'] = 33;
 print $a['d'];
+print_r(array_keys($a));
+print $b[0];
+print_r(array_keys($b));
 echo htmlspecialchars("<");
+
+list ($ymd, $num_m) = explode ('D', "1120328D66");
+echo $ymd." ".$num_m;
+
+$subject = "abc=def,abdd=1,ddfd=33";
+$a = explode(',', $subject);
+print_r($a);
+foreach ($a as $k) {
+	echo $k;
+}
+$a = implode(':', $a);
+print_r($a);
+preg_match('/([^=]*)=([^=]*)/', $subject, $matches);
+print_r($matches);
 ?>

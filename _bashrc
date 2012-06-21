@@ -1,6 +1,5 @@
 # cygwin only
 if [ $OSTYPE == 'cygwin' ]; then
-        export PATH=/d/tools/vim:$PATH
         alias ls='ls --color --show-control-chars'
         alias dir='dir -N --color'
         cr() {
@@ -11,13 +10,6 @@ if [ $OSTYPE == 'cygwin' ]; then
                 echo "Please follow a path to explore."
             else
                 cr `cygpath -w $1`
-            fi
-        }
-        vim() {
-            if [ $# -lt 1 ]; then
-                echo "Please follow a file name."
-            else
-                cr gvim -p --remote-tab-silent `cygpath -w $1`
             fi
         }
         gdiff() {
@@ -41,14 +33,12 @@ if [ $OSTYPE == 'cygwin' ]; then
 elif [ $OSTYPE == 'darwin10.0' ]; then
     alias ls='ls -G'
     export PATH=/usr/local/git/bin/:/Applications/MacVim-7_3-53/:$PATH
-    alias vim='mvim --remote-tab-silent'
     alias mysql='/usr/local/mysql-5.5.19-osx10.6-x86/bin/mysql'
     export PS1="\[\033]0;\u@\h: \w\007\][\u@\h \W]\$ "
 fi
 
 alias ll='ls -l'
 export HISTCONTROL=ignoredups
-# alias vim='vim -o'
 # export LANG="zh_CN.GBK"
 # export http_proxy=http://proxy.b.com:8080
 
@@ -91,25 +81,14 @@ d2b () {
 
 b2h () {
     echo "obase=16;ibase=2;$@"|bc
-} 
+}
 
 b2d () {
     echo "obase=10;ibase=2;$@"|bc
-} 
+}
 
 h2c() {
-    echo "0: $@ 0a"|xxd.exe -r 
-}
-vin() {
-    if [ $# -ne 1 ]; then
-        vim $@
-    else
-        if [ ${1#*:} != ${1%:*} ]; then
-            vim +${1#*:} ${1%:*}
-        else
-            vim $1
-        fi
-    fi
+    echo "0: $@ 0a"|xxd.exe -r
 }
 listtextfiles() {
     if [ $# -ne 1 ]; then
@@ -124,4 +103,7 @@ listbinaryfiles() {
     else
         find $1 -type f -exec file {} \;|grep -v ":.*text"|cut -d ":" -f1
     fi
+}
+funiq() {
+    perl /works/scriptbundle/unique.pl $@
 }

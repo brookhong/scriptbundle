@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>HTML TEST</title>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+    </head>
+    <body>
+        <script language="javascript">
+            function abortImage()
+            {
+                alert('Error: Loading of the image was aborted!')
+            }
+            function display(msg) {
+                $('#target').text(msg);
+            }
+            function display2(data) {
+                display(data.results[0])
+            }
+            var d = new Object();
+            (function(a) {
+                d.name = "brook";
+                d.say = function(s) {
+                    display(this.name + " says > " + s);
+                };
+            })(d);
+            d.say("hello");
+            d.say("yes");
+            $(document).ready(function(){
+                $('.ajaxtrigger').click(function(){
+                    display('ok');
+                    doAjax($(this).attr('href'));
+                    return false;
+                });
+                function doAjax(url){
+                    if(url.match('^http')){
+                        $.getJSON("http://query.yahooapis.com/v1/public/yql?"+
+                        "q=select%20*%20from%20html%20where%20url%3D%22"+
+                        encodeURIComponent(url)+
+                        "%22&format=xml'&callback=?",
+                        function(data){
+                            if(data.results[0]){
+                                display(data.results[0]);
+                                } else {
+                                var errormsg = '<p>Error: could not load the page.</p>';
+                                display(errormsg);
+                            }
+                        });
+                    }
+                }
+                $('.noyql').click(function() {
+                    display("nosql");
+                    $.ajax({
+                        url: $(this).attr('href'),
+                        }).done(function ( data ) {
+                        display($(data).find('value').text());
+                    });
+                });
+                $('#saveLink').click(function() {
+                    display("saving data");
+                    $.ajax({
+                        url: "http://query.yahooapis.com/v1/public/yql?q=update%20yql.storage%20set%20value%3D%22"+
+                        encodeURIComponent($('#mylink').val())+
+                        "%22%20where%20name%3D%22store%3A%2F%2FHKO7HaS9bdV0BCNGxFc7Mm%22%0A",
+                        dataType: 'jsonp',
+                        jsonpCallback: 'display2'
+                        });
+                });
+            });
+        </script>
+        <p href="http://www.baidu.com" class="ajaxtrigger">baidu</p>
+        <p href="http://www.baidu.com" class="noyql">noyql-baidu</p>
+        <p href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fwww.baidu.com%22&format=xml" class="noyql">noyql-yahooapis</p>
+        <p href="http://translate.google.com/translate_a/t?client=t&text=hello&hl=#{hl}&sl=#{sl}&tl=#{tl}&multires=1&otf=1&ssel=0&tsel=0&sc=1" class="noyql">noyql-translate.google.com</p>
+        <p href="http://openapi.baidu.com/public/2.0/bmt/translate" class="noyql">noyql-openapi.baidu.com</p>
+        <p href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yql.storage%20where%20name%3D%22store%3A%2F%2FwmhVLt8qvHLBj0jsSvan8e%22" class="noyql">noyql-yahooapis-select</p>
+        <p><span id="saveLink">noyql-yahooapis-update</span><input id='mylink'/></p>
+        <hr>
+        <img src="http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif" onerror="abortImage()" onabort="abortImage()" />
+        <div id="target"></div>
+    </body>
+</html>
+

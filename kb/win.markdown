@@ -135,6 +135,18 @@
     iptables -A Linox-INTRANET-INPUT-HOOK  -p tcp --dport 8080 -j ACCEPT
     extract rpm package: rpm2cpio php-5.1.4-1.esp1.x86_64.rpm | cpio -idmv
     jobeet: svn co http://svn.jobeet.org/doctrine/trunk/
+
+    build tmux
+    cd libevent-2.0.19-stable
+    ./configure --prefix=/home/httpd/copper/usr/
+    make
+    make install
+    cd tmux-1.6
+    LDFLAGS="-L/home/httpd/copper/usr/lib" CPPFLAGS="-I/home/httpd/copper/usr/include" LIBS="-lresolv" ./configure --prefix=/home/httpd/copper/usr/
+    make
+    make install
+    patchelf --set-rpath /home/httpd/copper/usr/lib/ ~/copper/usr/bin/tmux
+
   
 > > > ---
     build openssl
