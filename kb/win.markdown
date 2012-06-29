@@ -23,7 +23,7 @@
     git config --global alias.co checkout
     git config --global diff.external /d/works/scriptbundle/gitdiff.sh
     git config core.filemode false
-    git config --global alias.sc "show --pretty=\"format:\" --name-only"
+    git config --global alias.sc "show --pretty=\"format:\" --name-status"
     git config --global alias.sma "submodule add"
     git config --global core.gitproxy /usr/local/bin/gitproxy
     * cmds
@@ -43,9 +43,9 @@
     * /etc/ssh/sshd_config on server
         RSAAuthentication yes
         PubkeyAuthentication yes
-        AuthorizedKeysFile    .ssh/authorized_keys        
+        AuthorizedKeysFile    .ssh/authorized_keys
     * sudo /usr/sbin/sshd -d
-   
+
 > ## vim
 > > > ---
     * :0put = range(1,100) 纵插入1，100数字 :for i in range(1,10)|put ='192.168.0.1'.i|endfor
@@ -146,8 +146,10 @@
     make
     make install
     patchelf --set-rpath /home/httpd/copper/usr/lib/ ~/copper/usr/bin/tmux
+    rsync -rv httpd@www5.dev.abc.com:~/depot/main main
+    p4 describe -s 383994
 
-  
+
 > > > ---
     build openssl
     ./config --prefix=/opt/openssl-0.9.8e/
@@ -166,49 +168,49 @@
 
     一、Windows 7 下硬盘全新安装更高版本Windows7
 
-    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600) 
-    2、开机按F8 -> 修复系统 -> 选择最后一项命令修复  -> 在命令框输入“D:7600sourcessetup.exe“(不带引号) 
+    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600)
+    2、开机按F8 -> 修复系统 -> 选择最后一项命令修复  -> 在命令框输入“D:7600sourcessetup.exe“(不带引号)
     3、进入安装界面、选择Custom Install (自定义安装)
-    4、选择安装语言、格式化C盘 
+    4、选择安装语言、格式化C盘
     5、安装完成后将是纯净系统(非双系统)
 
     二、硬盘有Windows 7镜像，同时有Vista安装盘
-    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600) 
-    2、BIOS中选择光驱启动，进入Vista安装界面 
-    3、选择左下角修复计算机(自动搜索系统，提示加载驱动或关闭，选择关闭进入修复选项) 
-    4、选择最后一项命令修复，在命令框输入“D:7600sourcessetup.exe“(不带引号)，开始安装 
+    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600)
+    2、BIOS中选择光驱启动，进入Vista安装界面
+    3、选择左下角修复计算机(自动搜索系统，提示加载驱动或关闭，选择关闭进入修复选项)
+    4、选择最后一项命令修复，在命令框输入“D:7600sourcessetup.exe“(不带引号)，开始安装
     5、选择安装语言、格式化C盘 (即使C盘原本没有系统此法也可行)
 
     三、XP系统下硬盘全新安装Windows 7
 
-    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600) 
+    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600)
     2、把D:7600目录下的bootmgr和boot目录，并在C盘根目录下建个sources文件夹
-    3、把D:7600sources下的boot.win复制到C盘刚建的sources文件夹 
-    4、用管理员身份运行cmd，然后输入c:bootbootsect.exe/nt60 c: 提示successful(即成功了!) 
+    3、把D:7600sources下的boot.win复制到C盘刚建的sources文件夹
+    4、用管理员身份运行cmd，然后输入c:bootbootsect.exe/nt60 c: 提示successful(即成功了!)
     5、关闭cmd窗口重启计算机，自动进入安装界面，选择安装语言
-    6、出现“开始安装界面”，(要注意了，不点击“现在安装”)点左下角“修复计算机”(repair mycomputer)，进入"系统恢复选择"，选择最后一项"命令提示符"(commandprompt)，进入DOS窗口 
-    7、输入“D:7600sourcessetup.exe“(不带引号)，开始安装 
-    8、选择安装语言、格式化C盘，就OK了 
+    6、出现“开始安装界面”，(要注意了，不点击“现在安装”)点左下角“修复计算机”(repair mycomputer)，进入"系统恢复选择"，选择最后一项"命令提示符"(commandprompt)，进入DOS窗口
+    7、输入“D:7600sourcessetup.exe“(不带引号)，开始安装
+    8、选择安装语言、格式化C盘，就OK了
 
     四、Vista系统下全新安装Windows7(实践证明XP用此种方法也更加方便)
 
-    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600) 
-    2、复制D:7600文件夹中的Boot、EFI、sources文件夹和bootmgr至C盘根目录下 
-    3、复制D:7600boot下Bootsect.exe至C盘根目录下 
-    4、管理员身份运行cmd，输入c:bootsect.exe/nt60 c:并回车(最好复制，中间有空格) 
-    5、重启系统自动进入安装界面，点左下角的修复计算机repair my computer) 
-    6、选择最后一项命令提示符，进入DOS窗口，输入D:7600sourcessetup.exe进入安装界面 
+    1、下载Windows7 7600 ISO镜像，用虚拟光驱拷贝至非C盘(如D:7600)
+    2、复制D:7600文件夹中的Boot、EFI、sources文件夹和bootmgr至C盘根目录下
+    3、复制D:7600boot下Bootsect.exe至C盘根目录下
+    4、管理员身份运行cmd，输入c:bootsect.exe/nt60 c:并回车(最好复制，中间有空格)
+    5、重启系统自动进入安装界面，点左下角的修复计算机repair my computer)
+    6、选择最后一项命令提示符，进入DOS窗口，输入D:7600sourcessetup.exe进入安装界面
     7、选择安装语言、格式化C盘，就OK了
 
 # mac
 > > > ---
-    * hdiutil mount a.dmg 
+    * hdiutil mount a.dmg
 
 # n97mini
   * N97mini硬格方法
 
 > > > ---
-    手机连接电脑，删除E盘和内存卡上 
+    手机连接电脑，删除E盘和内存卡上
     private  sys  system  resource  patches几个文件夹  这样其他文件不丢失
     然后再硬格C盘比较彻底
     硬格C盘 关机  按住shift(左下角) + 删除键(右上角←键) + 空格，不要松手
