@@ -54,6 +54,10 @@
     * gF 打开光标下的文件名，能识别文件名后的行号（如 abc:80 等）。
     * g; 按照最近修改的顺序进行光标的跳转，g, 与 g; 类似但方向相反
     * :scriptnames 列出全部已加载的插件和 vimrc 文件
+    * do - diff obtain
+    * dp - diff put
+    * [c - previous difference
+    * ]c - next difference
 
 > ## english
 > > > ---
@@ -121,6 +125,8 @@
     find . -type f -newer ./sql/3.0/product_countries.sql -exec ls -l {} \;
     find /home/ -maxdepth 2 -iname ".bashrc" -exec echo "###"{} \; -exec echo "=========" \; -exec cat {} \; -exec echo "==========" \;
     find broken links: find / -type l ! -exec test -r {} \; -print
+    find . -path './lib/vendor/*' -prune -o -path './.git/*' -prune -o -type f
+    find . -type f|sed '/\/lib\/vendor\//d'|sed '/\.git/d'
     -T filename In x or t mode, tar will read the list of names to be extracted from filename.  In c mode, tar will read names to be archived from filename.
     tar czvf a.tgz -T a
     iptables -L
@@ -148,6 +154,9 @@
     patchelf --set-rpath /home/httpd/copper/usr/lib/ ~/copper/usr/bin/tmux
     rsync -rv httpd@www5.dev.abc.com:~/depot/main main
     p4 describe -s 383994
+
+    http://mama.indstate.edu/users/ice/tree/
+    tree --noreport |sed '/│   └── vendor/,/│                       └── sfWidgetTest.php/d'
 
 
 > > > ---
