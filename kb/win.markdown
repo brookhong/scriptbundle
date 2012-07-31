@@ -46,6 +46,43 @@
         AuthorizedKeysFile    .ssh/authorized_keys
     * sudo /usr/sbin/sshd -d
 
+> ## grub
+    * > rootnoverify (hd0,0) > chainloader +1 > boot
+
+1：建议先去grub官方网站下载grub4dos （官方开源项目网站：grub4dos.sourceforge.net）
+
+2：解压grldr.mbr、grldr、menu.lst 三个文件到C盘根目录，注意是根目录哦！
+
+3：然后以管理员模式运行cmd，输入bcdedit /create /d "grub" /application bootsector 会有一大串id，要记下，等下要用。
+
+4：执行以下命令——
+
+    bcdedit /set {id} device partition=c:
+    bcdedit /set {id} path \grldr.mbr
+    bcdedit /displayorder {id} /addlast
+
+
+1. install grub2 on your MBR
+    mount /dev/sda5 /mnt
+    sudo /usr/sbin/grub-install --root-directory=/mnt/ /dev/sda
+
+    grub-mkimage -d /boot/grub -p /grub2 -o ~/core.img -O i386-pc part_msdos biosdisk fat ntfs ext2 reiserfs
+    cat /boot/grub/lnxboot.img ~/core.img > ~/g2ldr
+    You need grubinst, which can be downloaded at: http://download.gna.org/grubutil/
+    grubinst -2 -o C:\g2ldr.mbr
+
+2. put linux mint iso file to C:
+
+3. reboot and enter grub2, run command
+
+    loopback loop (hd0,1)/linuxmint-201204-mate-cinnamon-dvd-64bit.iso
+    linux (loop)/casper/vmlinuz fromiso=/dev/sda1/linuxmint-201204-mate-cinnamon-dvd-64bit.iso boot=live config live-media-path=/casper noeject --
+    initrd (loop)/casper/initrd.lz
+    boot
+
+*  to boot windows: chainloader (hd0,1)+1
+
+
 > ## vim
 > > > ---
     * :0put = range(1,100) 纵插入1，100数字 :for i in range(1,10)|put ='192.168.0.1'.i|endfor
@@ -122,6 +159,7 @@
     history -cr $HISTFILE
     rpm -q --info php-aws
     grep -o "^#[0-9]\+[^(]*\|called at .*$" debug_print_backtrace_of_gigya_settings.log
+    ack token -G 'lib/vendor' --invert-file-match
     find . -type f -newer ./sql/3.0/product_countries.sql -exec ls -l {} \;
     find /home/ -maxdepth 2 -iname ".bashrc" -exec echo "###"{} \; -exec echo "=========" \; -exec cat {} \; -exec echo "==========" \;
     find broken links: find / -type l ! -exec test -r {} \; -print
@@ -129,6 +167,7 @@
     find . -type f|sed '/\/lib\/vendor\//d'|sed '/\.git/d'
     -T filename In x or t mode, tar will read the list of names to be extracted from filename.  In c mode, tar will read names to be archived from filename.
     tar czvf a.tgz -T a
+    tar --exclude jobeet/lib/vendor/symfony/ -czvf jobeet.tgz jobeet
     iptables -L
     iptables -D INPUT 6
     iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
@@ -154,6 +193,7 @@
     patchelf --set-rpath /home/httpd/copper/usr/lib/ ~/copper/usr/bin/tmux
     rsync -rv httpd@www5.dev.abc.com:~/depot/main main
     p4 describe -s 383994
+    p4 changelists //depot/trunk/...
 
     http://mama.indstate.edu/users/ice/tree/
     tree --noreport |sed '/│   └── vendor/,/│                       └── sfWidgetTest.php/d'

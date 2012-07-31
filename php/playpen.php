@@ -50,4 +50,13 @@ $a = implode(':', $a);
 print_r($a);
 preg_match('/([^=]*)=([^=]*)/', $subject, $matches);
 print_r($matches);
+
+$xmlObj = simplexml_load_string("<ReportSuite.SaveClassifications> <c_options/> <c_view>{{Campaign|classification}}</c_view> <camp_view>0</camp_view> <name>Delivery Tool</name> <rsid_list> <item>{{RSID}}</item> </rsid_list> </ReportSuite.SaveClassifications>");
+echo $xmlObj->name;
+
+$b['bac']++;
+$b['bac']++;
+if(array_key_exists('bac',$b)) {
+  print_r($b);
+}
 ?>
