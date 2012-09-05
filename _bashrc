@@ -30,12 +30,13 @@ if [ $OSTYPE == 'cygwin' ]; then
             fi
         }
     # Mac OS only
-elif [ $OSTYPE == 'darwin10.0' ]; then
+elif [[ $OSTYPE =~ 'darwin' ]]; then
     alias ls='ls -G'
     export PATH=/usr/local/git/bin/:/Applications/MacVim-7_3-53/:$PATH
     alias mysql='/usr/local/mysql-5.5.19-osx10.6-x86/bin/mysql'
-    export PS1="\[\033]0;\u@\h: \w\007\][\u@\h \W]\$ "
+    export PS1="\[\033[01;32m\]\u@\h\[\033[01;34m\] \w \$\[\033[00m\] "
 fi
+export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
 
 alias ll='ls -l'
 export HISTCONTROL=ignoredups
@@ -107,3 +108,5 @@ listbinaryfiles() {
 funiq() {
     perl /works/scriptbundle/unique.pl $@
 }
+
+set -o vi

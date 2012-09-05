@@ -19,9 +19,12 @@
     git push -u origin master
     * Useful config
     git config --global alias.s status
-    git config --global alias.d difftool
+    git config --global alias.d diff
+    git config --global alias.dt difftool
     git config --global alias.co checkout
     git config --global diff.external /d/works/scriptbundle/gitdiff.sh
+    git config --global diff.tool diffmerge
+    git config --global difftool.diffmerge.cmd "diffmerge \$LOCAL \$REMOTE"
     git config core.filemode false
     git config --global alias.sc "show --pretty=\"format:\" --name-status"
     git config --global alias.sma "submodule add"
@@ -198,6 +201,8 @@
     http://mama.indstate.edu/users/ice/tree/
     tree --noreport |sed '/│   └── vendor/,/│                       └── sfWidgetTest.php/d'
 
+    dpkg -S /etc/vim/vimrc
+    rpm -qf /usr/local/apache/conf/http.conf
 
 > > > ---
     build openssl
@@ -206,6 +211,23 @@
     make test
     make install
     sudo make install
+
+> > > ---
+    sudo apt-get install chromium
+    sudo apt-get install git
+    sudo apt-get install ibus
+    sudo apt-get install ibus-pinyin
+    sudo apt-get install openssh-server
+    sudo apt-get install vim-gtk
+    sudo apt-get install exuberant-ctags
+    wget http://www.agroman.net/corkscrew/corkscrew-2.0.tar.gz
+    sudo smbpasswd -a zhong
+    sudo service samba restart
+
+    sudo mkdir /usr/share/fonts/truetype/msyh
+    sudo cp Fonts/msyh.ttf /usr/share/fonts/truetype/msyh/
+    sudo mkfontscale
+    sudo mkfontdir
 # windows
 > ## cmd
 > > > ---
@@ -254,6 +276,7 @@
 # mac
 > > > ---
     * hdiutil mount a.dmg
+    * sudo scutil --set HostName brook_mbp
 
 # n97mini
   * N97mini硬格方法
