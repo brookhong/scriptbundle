@@ -20,7 +20,7 @@
     * Useful config
     git config --global alias.s status
     git config --global alias.d diff
-    git config --global alias.dt difftool
+    git config --global alias.dt "difftool -y"
     git config --global alias.co checkout
     git config --global diff.external /d/works/scriptbundle/gitdiff.sh
     git config --global diff.tool diffmerge
@@ -193,6 +193,8 @@
     iptables -A Linox-INTRANET-INPUT-HOOK  -p tcp --dport 8080 -j ACCEPT
     extract rpm package: rpm2cpio php-5.1.4-1.esp1.x86_64.rpm | cpio -idmv
     jobeet: svn co http://svn.jobeet.org/doctrine/trunk/
+    sudo fuser -n tcp <port>
+    sudo lsof -p <pid>
 
     build tmux
     cd libevent-2.0.19-stable
@@ -240,7 +242,7 @@
     make install
     sudo make install
 
-> > > ---
+> > > linuxmint
     sudo apt-get install chromium
     sudo apt-get install git
     sudo apt-get install ibus
@@ -256,6 +258,13 @@
     sudo cp Fonts/msyh.ttf /usr/share/fonts/truetype/msyh/
     sudo mkfontscale
     sudo mkfontdir
+
+    /var/cache/apt/archives/
+    sudo vim /etc/apt/sources.list
+    sudo vi /etc/default/grub
+    sudo update-grub
+
+
 # windows
 > ## cmd
 > > > ---

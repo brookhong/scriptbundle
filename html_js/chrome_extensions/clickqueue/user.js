@@ -7,6 +7,9 @@ var start_time = 0;
 
 function jackLink() {
     url = jQuery(this)[0].href;
+    if (! /http:\/\/bbs8899.net\/wz.aspx.*/i.test(url)) {
+        return true;
+    }
     if (links.indexOf(url) == -1) {
         jQuery(this).css('color','#39e');
         links.push(url);
@@ -32,6 +35,15 @@ function onClicked() {
     }
     chrome.extension.sendRequest({method:'setIcon',icon:ic});
 }
+jQuery(document).ready(function() {
+    if (/http:\/\/bbs8899.net\/sort.aspx.*/i.test(document.URL)) {
+        jQuery('body').append("<div style='border:2px solid #ccc;border-radius:5px;position:fixed;z-index:1996;top:0;padding:0px 5px 0px 5px;cursor:pointer;display:none;font-size:12px;background:#39e;' id='"+myid+"_view'></div>");
+        view = jQuery('#'+myid+'_view');
+        view.fadeTo('fast',0.7);
+        jQuery('a').click(jackLink);
+        chrome.extension.sendRequest({method:'setIcon',icon:1});
+    }
+});
 function onPageFinished() {
     if(links.length) {
         links.shift();

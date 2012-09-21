@@ -47,6 +47,9 @@ chrome.extension.onRequest.addListener(function(req,from) {
         chrome.browserAction.setIcon({path:"icon" + req.icon + ".png", tabId:from.tab.id});
     }
     else if(req.method == "addLink") {
+        if (!(from.tab.id in linksFromTabId)) {
+            linksFromTabId[from.tab.id] = [];
+        }
         linksFromTabId[from.tab.id].push(req.link);
         tabIdFromLink[req.link] = from.tab.id;
         titleString = Object.keys(linksFromTabId).length+"#"+Object.keys(tabIdFromLink).length+"#"+linksFromTabId[from.tab.id].length;

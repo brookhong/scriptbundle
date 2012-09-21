@@ -138,6 +138,18 @@ Func _SaveTitle()
     EndIf
 EndFunc
 
+;; ctrl+shift+t, 切换当前活动窗口的AlwaysOnTop状态
+$flagOnTop = 0
+HotKeySet("^+t", "_SetOnTop")
+Func _SetOnTop()
+    if $flagOnTop > 0 then
+        $flagOnTop = 0
+    else
+        $flagOnTop = 1
+    endif
+    WinSetOnTop("[active]", "", $flagOnTop)
+EndFunc
+
 ;; ctlr+alt+t, 测试入口
 HotKeySet("^!t", "_Test")
 Func _Test()
