@@ -143,11 +143,15 @@
     * in apache.conf --
       PHPINIDir /home/brookhong/php
 
-> > ### php
+> > ### jQuery
 > > > ---
     Get real height of a div --
     jQuery(jQuery("div.failure.message")[1]).outerHeight()
     jQuery("div.failure.message")[1].offsetHeight
+
+> > ### python
+> > > ---
+    export PYTHONPATH=/works/gyp-read-only/pylib/
 
 > > ### php.ini@windows
 > > > ---
@@ -203,6 +207,24 @@
 
     dpkg -S /etc/vim/vimrc
     rpm -qf /usr/local/apache/conf/http.conf
+
+> ## install archlinux
+> > > ---
+    1. fdisk /dev/sda
+    2. mkfs -t ext4 /dev/sda1 && mount /dev/sda1 /mnt
+    3. pacstrap /mnt base base-devel
+    4. pacstrap /mnt grub-bios
+    5. genfstab -p /mnt > /mnt/etc/fstab
+    6. arch-chroot /mnt
+    7. vi /etc/hostname
+    8. ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+    9. vi /etc/locale.conf
+          LANG="en_US.UTF-8"
+    10. vi /etc/locale.gen
+    11. locale-gen
+    12. mkinitcpio -p linux
+    13. cp /boot/grub/grub.cfg.example /boot/grub/grub.cfg && grub-install /dev/sda
+
 
 > > > ---
     build openssl
@@ -277,6 +299,8 @@
 > > > ---
     * hdiutil mount a.dmg
     * sudo scutil --set HostName brook_mbp
+    * The absolute fastest and easiest way to lock the screen in Mac OS X is with a simple keyboard shortcut: Control+Shift+Eject
+    * otool -L /Applications/Adium.app/Contents/MacOS/Adium
 
 # n97mini
   * N97mini硬格方法
@@ -287,6 +311,3 @@
     然后再硬格C盘比较彻底
     硬格C盘 关机  按住shift(左下角) + 删除键(右上角←键) + 空格，不要松手
     按开机键，直到出现地区选项，格式化完成 此格式化比较彻底.
-
-# reading
-《一百个人的十年》，《定西孤儿院纪事》，《夹边沟记事》，《墓碑》
