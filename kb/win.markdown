@@ -149,6 +149,12 @@
     jQuery(jQuery("div.failure.message")[1]).outerHeight()
     jQuery("div.failure.message")[1].offsetHeight
 
+> > ### node js
+> > > ---
+    npm install express
+    npm view express
+    npm install jade
+
 > > ### python
 > > > ---
     export PYTHONPATH=/works/gyp-read-only/pylib/

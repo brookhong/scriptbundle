@@ -1,0 +1,27 @@
+head
+  block scripts
+    script(type='text/javascript', src='http://code.jquery.com/jquery-latest.js')
+    script(type='text/javascript')
+
+      jQuery(document).ready(function() {
+        var classes = ['maxheight','maxwidth',''];
+        jQuery('img').click(function() {
+          var i = parseInt(jQuery(this).attr('cid'))+1;
+          i = (i>2)?0:i;
+          jQuery(this).attr('class', classes[i]);
+          jQuery(this).attr('cid', i);
+        });
+      });
+
+style
+  .maxheight {
+    max-height: 100%; width: auto;
+  }
+  .maxwidth {
+    max-width: 100%; height: auto;
+  }
+  body {
+    margin: 0px;
+  }
+
+img(src= file, class= 'maxheight', cid= 0)
