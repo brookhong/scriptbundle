@@ -1,18 +1,23 @@
 var express = require('express')
   , path = process.argv[2] || __dirname
   , app = express();
+var path = path.replace(/\\/g,'/');
+if(path[path.length-1] != '/'){
+  path += '/';
+}
 
 function getLastName(p) {
   var tmp = /.*\/([^\/]*)\//.exec(p);
   return tmp[1];
 }
-app.set('views', __dirname);
-app.set('view engine', 'jade');
 app.configure(function() {
   var hourMs = 1000*60*60;
   app.use('/static',express.static(path, { maxAge: hourMs }));
   app.use('/static',express.directory(path));
   app.use('/static',express.errorHandler());
+  app.use(express.static(__dirname + '/public'));
+  app.set('views', __dirname);
+  app.set('view engine', 'jade');
 });
 app.get('/random', function(req, res){
   var id = Math.round(Math.random()*files.length);
@@ -29,6 +34,7 @@ var walk    = require('walk');
 var files   = [];
 var walker  = walk.walk(path, { followLinks: false });
 walker.on('file', function(root, stat, next) {
-    files.push(stat.name);
+    var rp = root.replace(path,"");
+    files.push(rp+'/'+stat.name);
     next();
 });
