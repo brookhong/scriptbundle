@@ -142,6 +142,8 @@
       cscope -bq
     * in apache.conf --
       PHPINIDir /home/brookhong/php
+    * getallheaders()
+    * file_get_contents('php://input')
 
 > > ### jQuery
 > > > ---
@@ -164,6 +166,10 @@
     extension_dir=d:/tools/php-5.3.10-Win32-VC9-x86/ext/
     extension=php_mysql.dll
     extension=php_mysqli.dll
+
+> > ### mysql
+> > > ---
+    CREATE TABLE recipes_new LIKE production.recipes; INSERT recipes_new SELECT * FROM production.recipes;
 
 > ## linux
 > > > ---
@@ -316,6 +322,7 @@
     * sudo scutil --set HostName brook_mbp
     * The absolute fastest and easiest way to lock the screen in Mac OS X is with a simple keyboard shortcut: Control+Shift+Eject
     * otool -L /Applications/Adium.app/Contents/MacOS/Adium
+    * lsof -i TCP:9000
 
 # n97mini
   * N97mini硬格方法

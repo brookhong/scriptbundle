@@ -1,34 +1,37 @@
 # cygwin only
 if [ $OSTYPE == 'cygwin' ]; then
-        alias ls='ls --color --show-control-chars'
-        alias dir='dir -N --color'
-        cr() {
-            cmd /c start $@
-        }
-        exp() {
-            if [ $# -lt 1 ]; then
-                echo "Please follow a path to explore."
-            else
-                cr `cygpath -w $1`
-            fi
-        }
-        gdiff() {
-            if [ $# -lt 2 ]; then
-                echo "Usage: gdiff <FILE1> <FILE2>."
-            else
-                /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
-            fi
-        }
-        qt() {
-            amake=`alias make 2>/dev/nul`;
-            if [ -z "$amake" ]; then
-                export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
-                alias make='mingw32-make.exe'
-            else
-                export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
-            unalias make
-            fi
-        }
+    alias ls='ls --color --show-control-chars'
+    alias dir='dir -N --color'
+    cr() {
+        cmd /c start $@
+    }
+    exp() {
+        if [ $# -lt 1 ]; then
+            echo "Please follow a path to explore."
+        else
+            cr `cygpath -w $1`
+        fi
+    }
+    gdiff() {
+        if [ $# -lt 2 ]; then
+            echo "Usage: gdiff <FILE1> <FILE2>."
+        else
+            /d/tools/DiffMerge_3_3_0_18513/DiffMerge.exe `cygpath.exe -w $1` `cygpath.exe -w $2`
+        fi
+    }
+    qt() {
+        amake=`alias make 2>/dev/nul`;
+        if [ -z "$amake" ]; then
+            export PATH=/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:$PATH
+            alias make='mingw32-make.exe'
+        else
+            export PATH=${PATH##/c/Qt/2010.05/mingw/bin/:/c/Qt/2010.05/qt/bin/:}
+        unalias make
+        fi
+    }
+    if [ $SSH_TTY ] && [ ! $WINDOW ]; then
+        screen -D -U -R brook
+    fi
     # Mac OS only
 elif [[ $OSTYPE =~ 'darwin' ]]; then
     alias ls='ls -G'
@@ -39,6 +42,7 @@ fi
 export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
 
 alias ll='ls -l'
+alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 export HISTCONTROL=ignoredups
 # export LANG="zh_CN.GBK"
 # export http_proxy=http://proxy.b.com:8080
@@ -110,3 +114,43 @@ funiq() {
 }
 
 set -o vi
+# if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
+#    tmux -L brook attach || tmux -L brook; exit
+# fi
+#
+# serverList=(
+# "mydev:10.162.181.149:zhong:~:~/.ssh/id_rsa"
+# "vmdev:192.168.1.101:root:/works:~/.ssh/id_rsa"
+# )
+
+for server in "${serverList[@]}" ; do
+    serverInfo=(${server//:/ })
+    ssh_util_functions="$ssh_util_functions
+    ${serverInfo[0]}() {
+        ssh -i ${serverInfo[4]} ${serverInfo[2]}@${serverInfo[1]}
+    }
+    ${serverInfo[0]}get() {
+        if [ \$# -lt 2 ]; then
+            echo \"Usage: ${serverInfo[0]}get <remote_file> <local_file>.\"
+        else
+            scp -i ${serverInfo[4]} ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/\$1 \$2
+        fi
+    }
+    ${serverInfo[0]}put() {
+        if [ \$# -lt 2 ]; then
+            echo \"Usage: ${serverInfo[0]}put <local_file> <remote_file>.\"
+        else
+            scp -i ${serverInfo[4]} \$1 ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/\$2
+        fi
+    }
+    ${serverInfo[0]}sync() {
+        if [ \$# -lt 2 ]; then
+            echo \"Usage: ${serverInfo[0]}sync <remote_folder> <local_folder>.\"
+        else
+            echo \"rsync -rv ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/depot/\$1/ \$2/\"
+            rsync -rv ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/depot/\$1/ \$2/
+        fi
+    }"
+done
+
+eval "$ssh_util_functions"
