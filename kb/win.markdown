@@ -49,6 +49,11 @@
         AuthorizedKeysFile    .ssh/authorized_keys
     * sudo /usr/sbin/sshd -d
 
+> ## curl
+> > > ---
+    -L, --location
+    (HTTP/HTTPS)  If  the  server reports that the requested page has moved to a different location (indicated with a Location: header and a 3XX response code), this option will make curl redo the request on the new place.
+
 > ## grub
     * > rootnoverify (hd0,0) > chainloader +1 > boot
 
@@ -98,6 +103,9 @@
     * dp - diff put
     * [c - previous difference
     * ]c - next difference
+
+> > > ---
+    ./configure --prefix=/opt/vim --enable-python3interp=yes --with-python3-config-dir=/usr/lib/python3.2/config-3.2mu/ --enable-multibyte --enable-cscope
 
 > ## english
 > > > ---
@@ -239,6 +247,19 @@
     12. mkinitcpio -p linux
     13. cp /boot/grub/grub.cfg.example /boot/grub/grub.cfg && grub-install /dev/sda
 
+> > > ---
+    /etc/pacman.d/mirrorlist
+        Server = http://mirrors.163.com/archlinux/$repo/os/i686 
+        Server = http://mirrors.sohu.com/archlinux/$repo/os/i686 
+    /etc/pacman.conf
+        SigLevel = Never
+    pacman -S vim
+    pacman -S openssh
+    /etc/hosts.allow
+        sshd: 192.168.1.
+    /etc/rc.conf
+        DAEMONS=(... ... sshd ... ...)
+    /etc/rc.d/sshd restart
 
 > > > ---
     build openssl
@@ -275,6 +296,11 @@
 > ## cmd
 > > > ---
     icacls ftdetect /t /grant:r everyone:f
+
+> ## outlook
+> > > ---
+    如何让中文版的OUTLOOK2010在转发和答复时主题中显示英文的FW和RE？
+在选项、高级的国际设置里
 
 > ## install win7
 > > > ---

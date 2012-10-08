@@ -29,7 +29,7 @@ if [ $OSTYPE == 'cygwin' ]; then
         unalias make
         fi
     }
-    if [ $SSH_TTY ] && [ ! $WINDOW ]; then
+    if [ ! $WINDOW ]; then
         screen -D -U -R brook
     fi
     # Mac OS only
