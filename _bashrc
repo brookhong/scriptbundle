@@ -2,6 +2,7 @@
 if [ $OSTYPE == 'cygwin' ]; then
     alias ls='ls --color --show-control-chars'
     alias dir='dir -N --color'
+    alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
     cr() {
         cmd /c start $@
     }
@@ -38,11 +39,14 @@ elif [[ $OSTYPE =~ 'darwin' ]]; then
     export PATH=/usr/local/git/bin/:/Applications/MacVim-7_3-53/:$PATH
     alias mysql='/usr/local/mysql-5.5.19-osx10.6-x86/bin/mysql'
     export PS1="\[\033[01;32m\]\u@\h\[\033[01;34m\] \w \$\[\033[00m\] "
+elif [[ $OSTYPE =~ 'linux-gnu' ]]; then
+    if [ ! $TMUX ]; then
+       tmux -L brook attach || tmux -L brook; exit
+    fi
 fi
 export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
 
 alias ll='ls -l'
-alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 export HISTCONTROL=ignoredups
 # export LANG="zh_CN.GBK"
 # export http_proxy=http://proxy.b.com:8080
@@ -114,9 +118,6 @@ funiq() {
 }
 
 set -o vi
-# if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
-#    tmux -L brook attach || tmux -L brook; exit
-# fi
 #
 # serverList=(
 # "mydev:10.162.181.149:zhong:~:~/.ssh/id_rsa"
@@ -147,8 +148,8 @@ for server in "${serverList[@]}" ; do
         if [ \$# -lt 2 ]; then
             echo \"Usage: ${serverInfo[0]}sync <remote_folder> <local_folder>.\"
         else
-            echo \"rsync -rv ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/depot/\$1/ \$2/\"
-            rsync -rv ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/depot/\$1/ \$2/
+            echo \"rsync -rv ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/depot/\$1 \$2\"
+            rsync -rv ${serverInfo[2]}@${serverInfo[1]}:${serverInfo[3]}/depot/\$1 \$2
         fi
     }"
 done

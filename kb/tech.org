@@ -130,6 +130,10 @@
       PHPINIDir /home/brookhong/php
     * getallheaders()
     * file_get_contents('php://input')
+    * file_put_contents("/home/httpd/trace.log",$client->__getLastRequestHeaders(),FILE_APPEND);
+    * file_put_contents("/home/httpd/trace.log",$client->__getLastRequest(),FILE_APPEND);
+    * file_put_contents("/home/httpd/trace.log",$client->__getLastResponseHeaders(),FILE_APPEND);
+    * file_put_contents("/home/httpd/trace.log",$client->__getLastResponse(),FILE_APPEND);
 
 *** php.ini@windows
     extension_dir=d:/tools/php-5.3.10-Win32-VC9-x86/ext/
@@ -148,6 +152,9 @@
 
 ** python
     export PYTHONPATH=/works/gyp-read-only/pylib/
+    * python debugging
+    import pdb
+    pdb.set_trace()
 
 ** mysql
     CREATE TABLE recipes_new LIKE production.recipes; INSERT recipes_new SELECT * FROM production.recipes;
@@ -171,6 +178,7 @@
     -T filename In x or t mode, tar will read the list of names to be extracted from filename.  In c mode, tar will read names to be archived from filename.
     tar czvf a.tgz -T a
     tar --exclude jobeet/lib/vendor/symfony/ -czvf jobeet.tgz jobeet
+    tar czvf vimfiles.tgz --exclude .git vimfiles
     iptables -L
     iptables -D INPUT 6
     iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
@@ -308,6 +316,8 @@
     6、选择最后一项命令提示符，进入DOS窗口，输入D:7600sourcessetup.exe进入安装界面
     7、选择安装语言、格式化C盘，就OK了
 
+** Visual Studio Express
+   6VPJ7-H3CXH-HBTPT-X4T74-3YVY7
 * mac
     hdiutil mount a.dmg
     sudo scutil --set HostName brook_mbp
@@ -317,6 +327,8 @@
     * How do I exit full screen mode in vmware fusion for mac?
     control + command + s
     control + command + f
+    * Screencast
+      QuickTime Player + KeyCastr
 
 * n97mini
 ** N97mini硬格方法
