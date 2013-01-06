@@ -39,6 +39,7 @@
         Hostname github.com
         #ProxyCommand corkscrew <proxy_host> <proxy_port> %h %p
         IdentityFile ~/.ssh/id_rsa.git
+    * export GIT_SSL_NO_VERIFY=true
     * ~/.ssh on server
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/authorized_keys
@@ -80,7 +81,8 @@
 
 ** vim
     ./configure --prefix=/opt/vim --enable-python3interp=yes --with-python3-config-dir=/usr/lib/python3.2/config-3.2mu/ --enable-multibyte --enable-cscope
-    ./configure --prefix=/opt/vim --enable-cscope --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.4/config
+    export PATH=/opt/python2.7/bin:$PATH
+    ./configure --prefix=/opt/vim --enable-cscope --enable-pythoninterp --with-python-config-dir=/opt/python2.7/lib/python2.7/config/
     vim --cmd 'let $bp="/works/akitaonrails/"'
 
     * :0put = range(1,100) 纵插入1，100数字 :for i in range(1,10)|put ='192.168.0.1'.i|endfor
@@ -93,6 +95,15 @@
     * dp - diff put
     * [c - previous difference
     * ]c - next difference
+<<<<<<< HEAD
+=======
+    * vim substitute expression: %s/#\(\d\+\)/\='#'.(submatch(1)-1)/g
+    * Press Ctrl+I to insert text at the beginning of the column, Ctrl+A to append text, r to replace highlighted text, d to delete, c to change... etc.
+    * -W <scriptout>       将所有输入的命令写入到文件 <scriptout>
+    * gJ                   Join [count] lines, with a minimum of two lines.  Don't insert or remove any spaces.
+    * CTRL-R {0-9a-z"%#:-=.} Insert the contents of a numbered or named register.
+    * :lad[dexpr] {expr}   Same as ":caddexpr", except the location list for the current window is used instead of the quickfix list.
+>>>>>>> 38e0587... none
 
 ** perl
     * http://search.cpan.org/CPAN/authors/id/J/JO/JONATHAN/Math-Calculus-Expression-0.2.2.tar.gz
@@ -157,11 +168,21 @@
     pdb.set_trace()
 
 ** mysql
+    /etc/mysql/my.cnf: bind-address = 0.0.0.0
     CREATE TABLE recipes_new LIKE production.recipes; INSERT recipes_new SELECT * FROM production.recipes;
+    SHOW CREATE TABLE production.recipes;
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'10.27.10.199' identified by '123rfv';
+    FLUSH PRIVILEGES;
 
 ** english
     * weigh in (with sth) (infml 口) join in a discussion, an argument, etc by saying sth important or convincing; contribute confidently （在讨论、辩论等时）提出重要的或令人信服的意见; 自信地提出看法
 
+<<<<<<< HEAD
+=======
+** chrome extension path
+   mac: ~/Library/Application\ Support/Google/Chrome/Default/Extensions/
+   linux: ~/.config/google-chrome/Default/Extensions/
+>>>>>>> 38e0587... none
 * linux
 ** cmds
     export HISTCONTROL=ignoredups
@@ -272,6 +293,19 @@
     sudo vi /etc/default/grub
     sudo update-grub
 
+<<<<<<< HEAD
+=======
+    /var/log/apt/history.log
+
+** screen
+    escape ^Bb
+    bind R eval "source $HOME/.screenrc" "echo '.screenrc reloaded!'"
+    bindkey -k k7 #prev
+    bindkey -k k8 #next
+    caption string "%?%F%{= Bk}%? %C%A %D %d-%m-%Y %{= kB} %t%= %?%F%{= Bk}%:%{= wk}%? %n "
+    hardstatus alwayslastline
+    hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+>>>>>>> 38e0587... none
 * windows
 ** cmd
     icacls ftdetect /t /grant:r everyone:f
@@ -318,6 +352,9 @@
 
 ** Visual Studio Express
    6VPJ7-H3CXH-HBTPT-X4T74-3YVY7
+** excel
+   Layout -> Freeze Panes
+   Select a Column -> Filter
 * mac
     hdiutil mount a.dmg
     sudo scutil --set HostName brook_mbp
@@ -329,6 +366,11 @@
     control + command + f
     * Screencast
       QuickTime Player + KeyCastr
+    * sudo route add -net ahhha.zzl.org 172.24.0.1
+    * sudo route add play.baidu.com 172.24.0.1
+    * sudo route get ahhha.zzl.org
+    * sudo route delete ahhha.zzl.org
+    * netstat -nr|grep 172.24.0.1
 
 * n97mini
 ** N97mini硬格方法
