@@ -1,0 +1,22 @@
+head
+  block scripts
+    script(type='text/javascript', src='http://code.jquery.com/jquery-latest.js')
+    script(type='text/javascript', src='/js/ordered.js')
+
+style
+  .maxheight {
+    max-height: 100%; width: auto;
+  }
+  .maxwidth {
+    max-width: 100%; height: auto;
+  }
+  body {
+    margin: 0px;
+  }
+
+div(id='toolbars', style='display:none;position:fixed;z-index:1996;top:50%;left:40%;')
+  span(id='view_info')
+  input(id='tag')
+
+p(align='center')
+  img(src= file, class= 'maxheight', cid= 0)
